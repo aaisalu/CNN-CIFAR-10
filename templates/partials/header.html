@@ -1,0 +1,56 @@
+{% load static %}
+<header class="bg-gray-900 text-white py-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center px-6">
+        <!-- Logo -->
+        <a href="{% url 'homepage' %}" class="text-xl font-medium tracking-wide transition-transform duration-300">
+            Image Classifier
+        </a>
+
+        <!-- Navigation -->
+        <nav class="hidden md:flex space-x-8 text-lg">
+            {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+            <a href="{% url 'dashboard' %}"
+                class="relative text-gray-300 hover:text-white transition duration-300 hover:after:content-[''] hover:after:block hover:after:w-full hover:after:h-0.5 hover:after:bg-white hover:after:absolute hover:after:bottom-0 hover:after:left-0">
+                Dashboard
+            </a>
+            {% endif %}
+            <a href="{% url 'addpredict' %}"
+                class="relative text-gray-300 hover:text-white transition duration-300 hover:after:content-[''] hover:after:block hover:after:w-full hover:after:h-0.5 hover:after:bg-white hover:after:absolute hover:after:bottom-0 hover:after:left-0">
+                Classifier
+            </a>
+            <a href="{% url 'prediction_history' %}"
+                class="relative text-gray-300 hover:text-white transition duration-300 hover:after:content-[''] hover:after:block hover:after:w-full hover:after:h-0.5 hover:after:bg-white hover:after:absolute hover:after:bottom-0 hover:after:left-0">
+                History
+            </a>
+            <a href="{% url 'blogs' %}"
+                class="relative text-gray-300 hover:text-white transition duration-300 hover:after:content-[''] hover:after:block hover:after:w-full hover:after:h-0.5 hover:after:bg-white hover:after:absolute hover:after:bottom-0 hover:after:left-0">
+                Blog
+            </a>
+        </nav>
+
+        <!-- Authentication -->
+        <div class="flex items-center space-x-6">
+            {% if user.is_authenticated %}
+            <a href="{% url 'user_details' %}"
+                class="text-gray-300 hover:text-white transition duration-300 text-lg font-medium">
+                {{ user.username }}
+            </a>
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit"
+                    class="bg-red-600 px-6 py-2 rounded-lg text-white text-lg hover:bg-red-700 transition-transform duration-300">
+                    Logout
+                </button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="text-gray-300 hover:text-white transition duration-300 text-lg">
+                Sign In
+            </a>
+            <a href="{% url 'register' %}"
+                class="bg-blue-600 px-6 py-2 rounded-lg text-white text-lg hover:bg-blue-700 transition-transform duration-300">
+                Register
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</header>

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'partials/alerts.html' %}
+<!-- gradient-to-br from-gray-50 to-gray-100 -->
+<section class="text-gray-800 body-font py-16 bg-gradient-to-tr from-purple-100 to-blue-300">
+    <div class="container mx-auto px-6 md:px-12 flex flex-col items-center text-center">
+        <!-- Text Section -->
+        <div class="max-w-2xl flex flex-col items-center space-y-8">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight whitespace-nowrap animate-fade-in-up">
+                Predict Images in <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Real-Time</span>
+            </h1>
+
+            <p class="text-xl text-gray-600 mb-8 animate-fade-in-up delay-100">
+                Harness the power of CNN with the CIFAR-10 Dataset. Effortlessly predict and analyze images with
+                precision.
+            </p>
+            <div class="flex justify-center space-x-4 animate-fade-in-up delay-200">
+                {% if user.is_authenticated %}
+                <a href="{% url 'addpredict' %}"
+                    class="inline-flex items-center justify-center text-white bg-gradient-to-r from-blue-700 to-indigo-900 py-3 px-8 rounded-lg text-lg font-semibold hover:from-indigo-800 hover:to-blue-900 transition-all duration-300 ease-in-out transform focus:outline-none shadow-lg hover:shadow-xl backdrop-blur-sm bg-opacity-90 group">
+                    Predict Now<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-exclamation inline-block bounce -ml-2" viewBox="0 0 16 16"> <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.553.553 0 0 1-1.1 0z" />
+                    </svg>
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}"
+                    class="inline-flex items-center justify-center text-white bg-gradient-to-r from-blue-500 to-blue-800 py-3 px-8 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 ease-in-out transform focus:outline-none shadow-lg hover:shadow-xl backdrop-blur-sm bg-opacity-90 ">
+                    Get Started
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Image Section -->
+        <div class="mt-16 w-full max-w-3xl animate-fade-in-up">
+            <div
+                class="relative rounded-xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+                <img class="object-cover object-center w-full h-full transform transition-all duration-500 ease-in-out hover:scale-105"
+                    alt="hero" src="{% static 'images/block.jpg' %}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(5px); }
+    }
+    .group:hover .bounce {
+        animation: bounce 0.6s ease-in-out;
+    }
+    @keyframes fade-in-up {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    /* Smooth hover scaling for buttons and images */
+    .hover\:scale-105:hover {
+        transform: scale(1.05);
+    }
+
+    .hover\:scale-102:hover {
+        transform: scale(1.02);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% include 'partials/alerts.html' %}
+<section class="text-gray-800 body-font bg-gradient-to-br from-purple-50 to-blue-50 py-16">
+    <div class="container mx-auto px-5 flex flex-col items-center">
+        <!-- Heading Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                Predict Your Image
+            </h1>
+            <p class="text-xl text-gray-600">Upload an image and let the model predict its category.</p>
+        </div>
+
+        <!-- Upload Form -->
+        <div
+            class="bg-white rounded-3xl shadow-xl overflow-hidden w-full max-w-md border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <div class="p-1 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+            <div class="p-8">
+                <form class="space-y-6" action="{% url 'addpredict' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Drag and Drop Area -->
+                    <div class="flex items-center justify-center w-full">
+                        <label for="dropzone-file"
+                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-12 h-12 mb-3 text-blue-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                    </path>
+                                </svg>
+                                <p class="mb-2 text-lg text-gray-500 font-medium"><span class="text-blue-600">Click to
+                                        upload</span> or drag and drop</p>
+                                <p class="text-sm text-gray-400">JPG, PNG, or JPEG (MAX. 10MB)</p>
+                            </div>
+                            <input id="dropzone-file" type="file" name="file" class="hidden" required />
+                        </label>
+                    </div>
+
+                    <button
+                        class="w-full text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 py-4 px-6 focus:outline-none rounded-xl text-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 flex items-center justify-center space-x-2"
+                        type="submit">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span>Analyze Image</span>
+                    </button>
+                </form>
+
+                {% if error %}
+                <div class="mt-6 p-4 bg-red-50 rounded-lg border border-red-200">
+                    <p class="text-red-600 font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Dataset Info -->
+        <div class="mt-12 text-center max-w-4xl w-full">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Supported Image Categories</h2>
+            <p class="text-gray-600 text-lg mb-8">
+                Our model was trained on the CIFAR-10 dataset and can classify images into these 10 categories:
+            </p>
+
+            <!-- CIFAR-10 Categories Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                <!-- Airplane -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.5 3l1.5 3h8l-3.5 7H12l-1.5 4H7l1.5-4H4l2-6z" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Airplane</span>
+                </div>
+
+                <!-- Automobile -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 13h14l1 4H4l1-4zM5 13V8a1 1 0 011-1h12a1 1 0 011 1v5" />
+                            <circle cx="6.5" cy="17.5" r="1.5" />
+                            <circle cx="17.5" cy="17.5" r="1.5" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Automobile</span>
+                </div>
+
+                <!-- Bird -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m0 0l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Bird</span>
+                </div>
+
+                <!-- Cat -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 4l3 3m11-3l-3 3M5 20h14l-1.5-7.5a6.5 6.5 0 00-11 0L5 20z" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Cat</span>
+                </div>
+
+                <!-- Deer -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 12l-4-8M4 12l4-8m0 0L9 4l3 2 3-2 1 1m-1 1l-2 2v2l3 1 2 3" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Deer</span>
+                </div>
+
+                <!-- Dog -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 18v-2a2 2 0 012-2h2a2 2 0 012 2v2m-4-6V9a2 2 0 10-4 0v1M17 7V6a4 4 0 00-8 0v1" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Dog</span>
+                </div>
+
+                <!-- Frog -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="7" cy="5" r="2" />
+                            <circle cx="17" cy="5" r="2" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 11c0-2 3-3 7-3s7 1 7 3-3 5-7 5-7-3-7-5z" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Frog</span>
+                </div>
+
+                <!-- Horse -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 6h8l2 5v4a4 4 0 01-8 0H6l2-9z" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Horse</span>
+                </div>
+
+                <!-- Ship -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 20h18l-2-9H5l-2 9zM7 11V9a5 5 0 0110 0v2" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Ship</span>
+                </div>
+
+                <!-- Truck -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 13h13v4H3zM16 13h4l1 4h-5zM5 17h.01M18 17h.01" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-gray-800">Truck</span>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-6 inline-block max-w-2xl">
+                <p class="text-blue-800 flex items-start">
+                    <svg class="w-5 h-5 mr-2 mt-1 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>For best results, upload clear images that match one of these categories. The model works best
+                        with images similar to the CIFAR-10 training dataset (32x32 pixel images centered on a single
+                        object).</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Simple script to show filename when selected
+    document.getElementById('dropzone-file').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            const dropzoneText = document.querySelector('.flex.flex-col.items-center.justify-center.pt-5.pb-6');
+            dropzoneText.innerHTML = `
+                <svg class="w-12 h-12 mb-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="mb-2 text-lg text-gray-700 font-medium">${fileName}</p>
+                <p class="text-sm text-gray-500">Ready for analysis</p>
+            `;
+        }
+    });
+</script>
+{% endblock %}

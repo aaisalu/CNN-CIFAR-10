@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'partials/alerts.html' %}
+<section
+    class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl">
+        <!-- Hero Section -->
+        <div class="text-center lg:text-left max-w-md">
+            <h1
+                class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight uppercase animate-fadeIn">
+                Let's Dive In!
+            </h1>
+            <p class="mt-4 text-lg text-gray-600">
+                Let the machine predict the image with ease and accuracy.
+            </p>
+        </div>
+
+        <!-- Login Card -->
+        <div
+            class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md transform hover:scale-[1.02] transition-transform duration-300">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6 text-center uppercase">Login</h2>
+
+            <!-- Sign in with Google Button -->
+            <div class="mb-6">
+                <form method="post" action="{% url 'social:begin' 'google-oauth2' %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="w-full flex items-center justify-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866.549 3.921 1.453l2.814-2.814C17.503 2.988 15.139 2 12.545 2 7.021 2 2.545 6.477 2.545 12s4.476 10 10 10c8.396 0 10-7.496 10-10 0-.67-.069-1.325-.189-1.961H12.545z" />
+                        </svg>
+                        <span>Sign in with Google</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-3 bg-white text-gray-500 font-medium">OR</span>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-6">
+                    <input
+                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-3 px-4 transition-all duration-200 placeholder-gray-400"
+                        placeholder="Username" type="text" name="username" required />
+                </div>
+                <div class="mb-6">
+                    <div class="relative">
+                        <input id="password"
+                            class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-3 px-4 pr-10 transition-all duration-200 placeholder-gray-400"
+                            placeholder="Password" type="password" name="password" required />
+                        <button type="button" id="togglePassword"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}" />
+                {% endif %}
+                <button
+                    class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-lg px-6 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-xl uppercase"
+                    type="submit">
+                    Login
+                </button>
+                <p class="text-sm text-gray-500 mt-4 text-center">
+                    <a href="{% url 'reset_password' %}"
+                        class="text-indigo-600 hover:text-indigo-800 hover:underline">Forgot Password?</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Decorative Circle (Background Element) -->
+    <div class="absolute top-10 left-10 w-32 h-32 bg-indigo-100 rounded-full opacity-50"></div>
+</section>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 1s ease-in-out;
+    }
+</style>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        this.querySelector('svg').innerHTML = isPassword ?
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.98 8.223A10.477 10.477 0 001.934 12c1.274 4.057 5.064 7 9.542 7 3.898 0 7.256-2.203 9.006-5.423M10 10l4 4m0-4l-4 4" />` :
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
+    });
+</script>
+{% endblock %}

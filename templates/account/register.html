@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'partials/alerts.html' %}
+<section
+    class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl">
+        <!-- Hero Section -->
+        <div class="text-center lg:text-left max-w-md">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight uppercase">
+                Welcome to Our Platform
+            </h1>
+            <p class="mt-4 text-lg text-gray-600">
+                Unlock powerful image prediction features by creating an account.
+            </p>
+        </div>
+
+        <!-- Auth Card -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6 text-center uppercase">Sign up for free</h2>
+
+            <!-- Google Auth Button -->
+            <div class="mb-6">
+                <form method="post" action="{% url 'social:begin' 'google-oauth2' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button type="submit"
+                        class="w-full flex items-center justify-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866.549 3.921 1.453l2.814-2.814C17.503 2.988 15.139 2 12.545 2 7.021 2 2.545 6.477 2.545 12s4.476 10 10 10c8.396 0 10-7.496 10-10 0-.67-.069-1.325-.189-1.961H12.545z" />
+                        </svg>
+                        <span>Sign in with Google</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-3 bg-white text-gray-500 font-medium">OR</span>
+                </div>
+            </div>
+
+            <!-- Sign Up Form -->
+            <form action="{% url 'register' %}" method="POST" id="registerForm" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <input id="first_name"
+                            class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 transition-all duration-200 placeholder-gray-400"
+                            type="text" name="first_name" placeholder="First Name" required />
+                    </div>
+                    <div>
+                        <input id="last_name"
+                            class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 transition-all duration-200 placeholder-gray-400"
+                            type="text" name="last_name" placeholder="Last Name" required />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <input id="username"
+                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 transition-all duration-200 placeholder-gray-400"
+                        placeholder="Username" type="text" name="username" required />
+                </div>
+
+                <div class="mb-4">
+                    <input id="email"
+                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 transition-all duration-200 placeholder-gray-400"
+                        placeholder="Email" type="email" name="email" required />
+                </div>
+
+                <div class="mb-4">
+                    <div class="relative">
+                        <input id="password"
+                            class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 pr-10 transition-all duration-200 placeholder-gray-400"
+                            type="password" name="password" placeholder="Password" required
+                            onkeyup="checkPasswordStrength()" />
+                        <button type="button" id="togglePassword"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-100 rounded-full h-2">
+                            <div id="passwordStrengthBar" class="h-2 rounded-full transition-all duration-300"
+                                style="width: 0%"></div>
+                        </div>
+                        <span id="passwordStrengthText" class="ml-3 text-sm text-gray-600 font-medium">Weak</span>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <input id="password2"
+                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base text-gray-700 py-2 px-4 transition-all duration-200 placeholder-gray-400"
+                        type="password" name="password2" placeholder="Confirm Password" required />
+                </div>
+
+                <div class="mb-6 flex items-start">
+                    <input id="terms" type="checkbox"
+                        class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-indigo-300"
+                        required>
+                    <label for="terms" class="ml-2 text-sm text-gray-700">
+                        I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-800 hover:underline">Terms
+                            and Conditions</a>
+                    </label>
+                </div>
+
+                <button
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-6 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 uppercase"
+                    type="submit">
+                    Create Account
+                </button>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account?
+                        <a href="{% url 'login' %}"
+                            class="font-medium text-indigo-600 hover:text-indigo-800 hover:underline">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Decorative Circle (Background Element) -->
+    <div class="absolute top-10 left-10 w-32 h-32 bg-indigo-100 rounded-full opacity-50"></div>
+</section>
+
+<script>
+    // Set to keep track of displayed messages
+    const displayedMessages = new Set();
+
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+
+        if (password.length === 0) {
+            strengthBar.style.width = '0%';
+            strengthBar.className = 'h-2 rounded-full transition-all duration-300';
+            strengthText.textContent = 'Weak';
+            return;
+        }
+
+        let strength = 0;
+        if (password.length >= 8) strength += 30;
+        if (/[A-Za-z]/.test(password)) strength += 30;
+        if (/\d/.test(password)) strength += 30;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 10;
+
+        if (strength <= 30) {
+            strengthBar.style.width = '25%';
+            strengthBar.className = 'h-2 rounded-full bg-red-400 transition-all duration-300';
+            strengthText.textContent = 'Weak';
+        } else if (strength <= 60) {
+            strengthBar.style.width = '50%';
+            strengthBar.className = 'h-2 rounded-full bg-yellow-400 transition-all duration-300';
+            strengthText.textContent = 'Medium';
+        } else {
+            strengthBar.style.width = '100%';
+            strengthBar.className = 'h-2 rounded-full bg-green-400 transition-all duration-300';
+            strengthText.textContent = 'Strong';
+        }
+    }
+
+    function showErrorToast(message) {
+        // Check if the message is already displayed
+        if (displayedMessages.has(message)) {
+            return; // Skip if message is already shown
+        }
+
+        const notification = document.getElementById('notification') || document.createElement('div');
+        if (!notification.id) {
+            notification.id = 'notification';
+            notification.className = 'fixed bottom-4 right-4 z-50 flex flex-col space-y-8';
+            document.body.appendChild(notification);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'notification-alert bg-red-50 border border-red-500 text-red-800 rounded-lg shadow-xl p-4 max-w-sm w-full transform transition-all duration-300 opacity-0 translate-y-4';
+        toast.setAttribute('data-message', message);
+        toast.innerHTML = `
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>${message}</span>
+            </div>
+            <button type="button" class="close p-1 rounded-full hover:bg-red-100" aria-label="Close">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    `;
+        notification.appendChild(toast);
+
+        // Add message to the set of displayed messages
+        displayedMessages.add(message);
+
+        setTimeout(() => {
+            toast.classList.remove('opacity-0', 'translate-y-4');
+        }, 10);
+
+        function removeNotification() {
+            toast.classList.add('opacity-0', 'translate-y-4');
+            setTimeout(() => {
+                toast.remove();
+                displayedMessages.delete(message); // Remove from set when dismissed
+            }, 300);
+        }
+
+        toast.querySelector('.close').addEventListener('click', removeNotification);
+        setTimeout(removeNotification, 5000);
+    }
+
+    function validateForm() {
+        const password = document.getElementById('password').value;
+        const password2 = document.getElementById('password2').value;
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            showErrorToast('Username can only contain letters, numbers, and underscores.');
+            return false;
+        }
+
+        if (!/^[\w\.-]+@[\w\.-]+\.\w+$/.test(email)) {
+            showErrorToast('Invalid email format.');
+            return false;
+        }
+
+        if (password.length < 8 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
+            showErrorToast('Password must be at least 8 characters long and include both letters and numbers.');
+            return false;
+        }
+
+        if (password !== password2) {
+            showErrorToast('Passwords do not match.');
+            return false;
+        }
+
+        return true;
+    }
+
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        this.querySelector('svg').innerHTML = isPassword ?
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.98 8.223A10.477 10.477 0 001.934 12c1.274 4.057 5.064 7 9.542 7 3.898 0 7.256-2.203 9.006-5.423M10 10l4 4m0-4l-4 4" />` :
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
+    });
+</script>
+{% endblock %}

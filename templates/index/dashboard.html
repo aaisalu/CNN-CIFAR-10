@@ -1,0 +1,476 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<section
+  class="text-gray-800 body-font bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 min-h-screen relative overflow-hidden">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      class="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full opacity-10 blur-xl transform -translate-x-1/2 -translate-y-1/2 animate-blob-blue will-change-transform">
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-pink-200 rounded-full opacity-10 blur-xl transform translate-x-1/2 translate-y-1/2 animate-blob-pink will-change-transform">
+    </div>
+    <div
+      class="absolute top-1/3 right-1/4 w-64 h-64 bg-purple-200 rounded-full opacity-10 blur-xl animate-blob-purple will-change-transform">
+    </div>
+  </div>
+
+  <div class="container mx-auto px-5 relative z-10">
+    <!-- Header Section -->
+    <div class="text-center mb-12" data-aos="fade-down">
+      <div class="inline-flex items-center justify-center mb-4">
+        <span class="inline-flex items-center justify-center rounded-full bg-blue-100 p-3 shadow-lg">
+          <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+        Admin <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Dashboard</span>
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Comprehensive overview of system metrics and user activities
+      </p>
+    </div>
+
+    <!-- Main Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+      <!-- Total Users Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200"
+        data-aos="fade-up" data-aos-delay="50">
+        <div class="p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-blue-50 text-blue-600 mr-4">
+              <i class="fas fa-users text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Total Users</p>
+              <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ total_users }}</h3>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500">
+            <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+            <span>Registered users in system</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Predictions Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-purple-200"
+        data-aos="fade-up" data-aos-delay="100">
+        <div class="p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-purple-50 text-purple-600 mr-4">
+              <i class="fas fa-chart-line text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Total Predictions</p>
+              <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ total_predictions }}</h3>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500">
+            <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+            <span>Predictions made in system</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avg Predictions Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-pink-200"
+        data-aos="fade-up" data-aos-delay="150">
+        <div class="p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-pink-50 text-pink-600 mr-4">
+              <i class="fas fa-calculator text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Avg Predictions/User</p>
+              <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ avg_predictions_per_user }}</h3>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500">
+            <i class="fas fa-info-circle text-blue-500 mr-1"></i>
+            <span>Average per active user</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Class Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-200"
+        data-aos="fade-up" data-aos-delay="200">
+        <div class="p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-indigo-50 text-indigo-600 mr-4">
+              <i class="fas fa-star text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Most Predicted Class</p>
+              <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ most_predicted_class }}</h3>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500">
+            <i class="fas fa-info-circle text-blue-500 mr-1"></i>
+            <span>Most frequent prediction</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Registrations Card -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-green-200"
+        data-aos="fade-up" data-aos-delay="250">
+        <div class="p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-green-50 text-green-600 mr-4">
+              <i class="fas fa-user-plus text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Recent Registrations</p>
+              <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ recent_users }}</h3>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500">
+            <i class="fas fa-info-circle text-blue-500 mr-1"></i>
+            <span>Users registered in last 7 days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Predictions Chart -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-semibold text-gray-800">Predictions Trend</h3>
+        </div>
+        {% if has_predictions %}
+        <div class="h-64">
+          <canvas id="predictionsChart" class="w-full h-full" data-labels='{{ chart_labels }}'
+            data-values='{{ chart_data }}'></canvas>
+        </div>
+        {% else %}
+        <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+          <p class="text-gray-500">No prediction data available</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Recent Activity Section -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Recent System Activity</h3>
+        <div class="space-y-4">
+          {% for prediction in recent_predictions %}
+          <div class="flex items-start">
+            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+              <i class="fas fa-chart-line text-purple-600"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800">
+                {% if prediction.submitted_by %}
+                {{ prediction.submitted_by.username }}
+                {% else %}
+                Anonymous
+                {% endif %}
+                submitted a prediction
+              </p>
+              <p class="text-xs text-gray-500">{{ prediction.uploaded_at|date:"M d, Y H:i" }}</p>
+            </div>
+          </div>
+          {% empty %}
+          <div class="flex items-start">
+            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+              <i class="fas fa-info-circle text-gray-600"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800">No recent activity</p>
+              <p class="text-xs text-gray-500">System is idle</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Predictions Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8" data-aos="fade-up">
+      <div class="px-6 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-800">Recent Predictions</h3>
+      </div>
+      {% if recent_predictions %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                User</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Image</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Prediction</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Confidence</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for prediction in recent_predictions %}
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user text-blue-600"></i>
+                  </div>
+                  <div class="ml-4">
+                    {% if prediction.submitted_by %}
+                    <div class="text-sm font-medium text-gray-900">{{ prediction.submitted_by.username }}</div>
+                    <div class="text-sm text-gray-500">User ID: {{ prediction.submitted_by.id }}</div>
+                    {% else %}
+                    <div class="text-sm font-medium text-gray-900">Anonymous</div>
+                    <div class="text-sm text-gray-500">User ID: N/A</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {% if prediction.image_file %}
+                <img src="{{ prediction.image_file.url }}" alt="Prediction"
+                  class="h-12 w-12 rounded-md object-cover shadow-sm">
+                {% else %}
+                <span class="text-gray-400">No image</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ prediction.class_1|default:"N/A" }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="bg-blue-600 h-2.5 rounded-full"
+                    style="--progress-width: {{ prediction.prob_1|default:'0' }}%"></div>
+                </div>
+                <span class="text-xs text-gray-500 mt-1">{{ prediction.prob_1|floatformat:2|default:"0" }}%</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ prediction.uploaded_at|date:"M d, Y H:i" }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-8 text-center">
+        <i class="fas fa-inbox text-4xl text-gray-300 mb-3"></i>
+        <p class="text-gray-500">No recent predictions found</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Top Active Users Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8" data-aos="fade-up">
+      <div class="px-6 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-800">Top Active Users</h3>
+      </div>
+      {% if top_active_users %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                User</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Prediction Count</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Last Active</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for user in top_active_users %}
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user text-blue-600"></i>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">{{ user.username }}</div>
+                    <div class="text-sm text-gray-500">User ID: {{ user.id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ user.prediction_count }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {% with last_prediction=user.prediction_set.last %}
+                {{ last_prediction.uploaded_at|date:"M d, Y H:i" }}
+                {% endwith %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-8 text-center">
+        <i class="fas fa-users text-4xl text-gray-300 mb-3"></i>
+        <p class="text-gray-500">No active users found</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Footer Navigation -->
+    <div class="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-gray-200">
+      <div class="text-sm text-gray-500 mb-4 sm:mb-0">
+        Last updated: {% now "F j, Y H:i" %}
+      </div>
+      <div class="flex space-x-4">
+        <a href="{% url 'homepage' %}"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-home mr-2"></i> Back to Home
+        </a>
+        <a href="{% url 'export_pdf' %}"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-download mr-2"></i> Export Data
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Custom CSS -->
+<style>
+  /* Updated, optimized animations */
+  @keyframes blob-blue {
+
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+  }
+
+  @keyframes blob-pink {
+
+    0%,
+    100% {
+      transform: translate(50%, 50%) scale(1);
+    }
+
+    50% {
+      transform: translate(50%, 50%) scale(1.05);
+    }
+  }
+
+  @keyframes blob-purple {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  .animate-blob-blue {
+    animation: blob-blue 8s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .animate-blob-pink {
+    animation: blob-pink 10s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .animate-blob-purple {
+    animation: blob-purple 6s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  /* Hardware acceleration hints for smoother animations */
+  .will-change-transform {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
+  }
+
+  /* Reduce blur intensity for better performance */
+  .blur-xl {
+    filter: blur(24px);
+  }
+
+  .w-full>.bg-blue-600 {
+    width: var(--progress-width);
+  }
+</style>
+
+<!-- Include Chart.js -->
+{% if has_predictions %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const predictionsCtx = document.getElementById('predictionsChart');
+    if (predictionsCtx) {
+      const labels = JSON.parse(predictionsCtx.getAttribute('data-labels'));
+      const data = JSON.parse(predictionsCtx.getAttribute('data-values'));
+
+      new Chart(predictionsCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Predictions',
+            data: data,
+            borderColor: 'rgba(79, 70, 229, 1)',
+            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(17, 24, 39, 0.9)',
+              titleFont: { size: 14, weight: '600' },
+              bodyFont: { size: 13 },
+              padding: 12,
+              cornerRadius: 8,
+              displayColors: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(229, 231, 235, 1)' },
+              ticks: { color: 'rgba(107, 114, 128, 1)' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: 'rgba(107, 114, 128, 1)' }
+            }
+          }
+        }
+      });
+    }
+  });
+</script>
+{% endif %}
+{% endblock %}

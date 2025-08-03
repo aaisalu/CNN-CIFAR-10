@@ -1,0 +1,83 @@
+{% if messages %}
+{% load static %}
+<div id="notification" class="fixed bottom-4 right-4 z-50 flex flex-col space-y-8">
+    {% for message in messages %}
+    <div class="notification-alert transform transition-all duration-500 ease-in-out opacity-0 translate-y-4
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-50 border border-red-500 text-red-700
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} bg-green-50 border border-green-500 text-green-700
+                {% else %} bg-gray-50 border border-gray-500 text-gray-700
+                {% endif %} rounded-lg shadow-lg p-4 max-w-sm w-full" role="alert" aria-live="assertive"
+        aria-atomic="true" data-timeout="5000" data-message="{{ message }}">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-sm">{{ message }}</span>
+            </div>
+            <button type="button" class="close p-1 rounded-full hover:bg-red-100 transition-colors duration-200"
+                aria-label="Close" title="Close notification">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const notification = document.getElementById('notification');
+        const alerts = document.querySelectorAll('.notification-alert');
+
+        // Set to keep track of displayed messages
+        const displayedMessages = new Set();
+
+        // Show notifications with fade-in animation, filtering duplicates
+        notification.classList.remove('hidden');
+        alerts.forEach((alert, index) => {
+            const message = alert.getAttribute('data-message');
+
+            // Skip if this message has already been displayed
+            if (displayedMessages.has(message)) {
+                alert.remove();
+                return;
+            }
+
+            // Add message to the set of displayed messages
+            displayedMessages.add(message);
+
+            // Staggered animation for each alert
+            setTimeout(() => {
+                alert.classList.remove('opacity-0', 'translate-y-4');
+            }, index * 300);
+
+            // Function to remove a notification
+            function removeNotification(alert) {
+                const message = alert.getAttribute('data-message');
+                alert.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => {
+                    alert.remove();
+                    displayedMessages.delete(message); // Remove from set when dismissed
+                }, 500);
+            }
+
+            // Add close button functionality
+            const closeButton = alert.querySelector('.close');
+            closeButton.addEventListener('click', () => {
+                removeNotification(alert);
+            });
+
+            // Auto-close after the specified timeout (5 seconds)
+            const timeoutDuration = parseInt(alert.getAttribute('data-timeout'), 10);
+            setTimeout(() => {
+                removeNotification(alert);
+            }, timeoutDuration + 500);
+        });
+    });
+</script>
+{% endif %}
