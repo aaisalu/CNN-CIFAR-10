@@ -4,7 +4,7 @@ A full-stack web application for real-time image classification using a Convolut
 
 The project features a modern, responsive UI, social login integration, an admin dashboard, and PDF export of prediction history.
 
----
+![CIFAR-10 Web App Preview](static/images/preview.png)
 
 ## 🚀 Quick Start
 
